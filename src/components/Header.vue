@@ -1,5 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
-<script setup></script>
+<script setup>
+defineProps({
+  onClickDrawerOpen: Function
+})
+
+</script>
 
 <template>
   <header class="flex justify-between border-b border-slate-300 px-10 py-10 mb-15">
@@ -12,8 +17,8 @@
     </div>
     <ul class="flex items-center gap-10 mr-20">
       <li class="flex items-center gap-5 text-slate-500">
-        <a href="/cart"><img src="/cart.svg" alt="cart" /></a>
-        <a href="/cart"><b class="hover:text-stone-700">0 руб.</b></a>
+        <button><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen" /></button>
+        <button><b class="hover:text-stone-700" @click="onClickDrawerOpen" >0 ₽.</b></button>
       </li>
       <li class="flex items-center gap-5 text-slate-500">
         <a href="/heart"><img src="/heart.svg" alt="heart" /></a>
