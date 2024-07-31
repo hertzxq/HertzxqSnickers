@@ -10,6 +10,7 @@ defineProps({
   isFavorite: Boolean,
   isAdded: Boolean,
   onClickFavorite: Function,
+  onClickAdded: Function,
 })
 
 

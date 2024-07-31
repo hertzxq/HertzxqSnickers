@@ -8,6 +8,8 @@ import CartList from './Carts/CartList.vue'
 import Drawer from './Carts/Drawer.vue';
 
 const items = ref([])
+const cartItems = ref([])
+
 const filters = reactive({
   sortBy: '',
   search: ''
@@ -88,6 +90,27 @@ const addToFavorite = async (item) => {
   }
 }
 
+const addToCart = (item) => {
+  cartItems.value.push(item)
+  item.isAdded = true
+}
+
+const deleteFromCart = (item) => {
+  cartItems.value.splice(cartItems.value.indexOf(item), 1)
+  item.isAdded = false
+}
+
+const onClickToAdd = (item) => {
+  if(!item.isAdded) {
+    addToCart(item)
+  }else {
+    deleteFromCart(item)
+  }
+
+  console.log(cartItems.value);
+}
+
+
 onMounted(async () => {
   await fetchItems(),
   await fetchFavoriteItems()
@@ -105,12 +128,13 @@ watch(filters, async () => {
 
 provide("addToFavorite", addToFavorite)
 provide("onClickDrawerOpen", onClickDrawerOpen)
+provide("cartItems", cartItems, deleteFromCart, addToCart)
 
 </script>
 
 <template>
   <Header :onClickDrawerOpen="onClickDrawerOpen" />
-  <Drawer @onClickDrawerOpen="onClickDrawerOpen" v-if="drawerOpen" />
+  <Drawer v-if="drawerOpen" />
   <div>
   <div class="flex justify-between items-center m-8">
     <h2 class="text-3xl font-bold">Все кроссовки</h2>
@@ -133,5 +157,7 @@ provide("onClickDrawerOpen", onClickDrawerOpen)
   </div>
   <CartList
   :items="items"
+  @add-to-favorite="addToFavorite"
+  @add-to-cart="onClickToAdd"
   />
 </template>
