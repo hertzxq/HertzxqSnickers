@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 defineProps({
-  onClickDrawerOpen: Function
+  onClickDrawerOpen: Function,
+  drawerPrice: Number
 })
-
 </script>
 
 <template>
@@ -18,7 +18,9 @@ defineProps({
     <ul class="flex items-center gap-10 mr-20">
       <li class="flex items-center gap-5 text-slate-500">
         <button><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen" /></button>
-        <button><b class="hover:text-stone-700" @click="onClickDrawerOpen" >0 ₽.</b></button>
+        <button>
+          <b class="hover:text-stone-700" @click="onClickDrawerOpen">{{ drawerPrice }} ₽.</b>
+        </button>
       </li>
       <li class="flex items-center gap-5 text-slate-500">
         <a href="/heart"><img src="/heart.svg" alt="heart" /></a>

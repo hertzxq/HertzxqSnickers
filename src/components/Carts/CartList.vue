@@ -2,26 +2,25 @@
 import Cart from './Cart.vue'
 
 defineProps({
-  items: Array,
+  items: Array
 })
 
-const emit = defineEmits(['addToFavorite', "addToCart"])
-
+const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-2">
     <Cart
-    v-for="item in items"
-    :key="item.id"
-    :title="item.title"
-    :img="item.imageUrl"
-    :price="item.price" 
-    :id="item.id"
-    :isFavorite="item.isFavorite"
-    :isAdded="item.isAdded"
-    :onClickFavorite="() => emit('addToFavorite', item)"
-    :onClickAdded="() => emit('addToCart', item)"
+      v-for="item in items"
+      :key="item.id"
+      :title="item.title"
+      :img="item.imageUrl"
+      :price="item.price"
+      :id="item.id"
+      :isFavorite="item.isFavorite"
+      :isAdded="item.isAdded"
+      :onClickFavorite="() => emit('addToFavorite', item)"
+      :onClickToAdd="() => emit('onClickToAdd', item)"
     />
   </div>
 </template>
