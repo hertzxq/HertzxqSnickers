@@ -17,14 +17,20 @@ defineProps({
     </div>
     <ul class="flex items-center gap-10 mr-20">
       <li class="flex items-center gap-5 text-slate-500">
-        <button><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen" /></button>
-        <button>
-          <b class="hover:text-stone-700" @click="onClickDrawerOpen">{{ drawerPrice }} ₽.</b>
-        </button>
+        <router-link to="/"
+          ><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen"
+        /></router-link>
+        <router-link to="/">
+          <b class="hover:text-stone-700" @click="onClickDrawerOpen"
+            >{{ drawerPrice }} <span v-if="drawerPrice >= 0">₽.</span></b
+          >
+        </router-link>
       </li>
       <li class="flex items-center gap-5 text-slate-500">
-        <a href="/heart"><img src="/heart.svg" alt="heart" /></a>
-        <a href="/heart"><span class="hover:text-stone-700">Закладки</span></a>
+        <router-link to="/favorites"><img src="/heart.svg" alt="heart" /></router-link>
+        <router-link to="/favorites"
+          ><span class="hover:text-stone-700">Закладки</span></router-link
+        >
       </li>
       <li class="flex items-center gap-5 text-slate-500">
         <a href="/profile"><img src="/profile.svg" alt="profile" /></a>

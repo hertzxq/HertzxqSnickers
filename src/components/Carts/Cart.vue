@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-defineProps({
+const props = defineProps({
   id: Number,
   title: String,
   img: String,
@@ -23,7 +23,7 @@ defineProps({
         alt="Favorite"
       />
     </div>
-    <img :src="img" class="w-40" alt="Sneaker" />
+    <img :src="img" class="w-40" alt="Sneaker" @click="console.log(props.id)" />
     <p class="font-bold">{{ title }}</p>
     <div class="flex justify-between mt-5">
       <div class="flex flex-col gap-2">

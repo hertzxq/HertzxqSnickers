@@ -3,12 +3,13 @@ import { onMounted, reactive, provide, watch, computed } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
-import Header from './Header.vue'
-import CartList from './Carts/CartList.vue'
-import Drawer from './Carts/Drawer.vue'
+import Header from '@/components/Header.vue'
+import CartList from '@/components/Carts/CartList.vue'
+import Drawer from '@/components/Drawer/Drawer.vue'
 
 const items = ref([])
 const cartItems = ref([])
+//const purchase = ref([])
 
 const filters = reactive({
   sortBy: '',
@@ -80,27 +81,46 @@ const addToFavorite = async (item) => {
       const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj)
 
       item.favoriteId = data.id
+      console.log('Added to favorites:', data)
     } else {
-      item.isFavorite = false
-      await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
-      item.favoriteId = null
+      if (item.favoriteId) {
+        await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
+        console.log('Deleted from favorites:', item.favoriteId)
+        item.isFavorite = false
+        item.favoriteId = null
+      } else {
+        console.log('No favoriteId found for item:', item)
+      }
     }
     console.log(item)
   } catch (err) {
-    console.log(err)
+    console.log('Error:', err)
   }
 }
 
-const addToCart = (item) => {
-  cartItems.value.push(item)
-  item.isAdded = true
-  console.log('added')
+const addToCart = async (item) => {
+  try {
+    const { data } = await axios.post('https://3a4fbd5d3da59fc8.mokky.dev/purchase', {
+      id: item.id,
+      title: item.title,
+      price: item.price
+    })
+    item.isAdded = true
+    console.log('Item added to cart:', data)
+  } catch (error) {
+    console.error('Error adding item to cart:', error)
+  }
 }
 
-const deleteFromCart = (item) => {
-  cartItems.value.splice(cartItems.value.indexOf(item), 1)
-  item.isAdded = false
-  console.log('deleted')
+const deleteFromCart = async (item) => {
+  try {
+    const { data } = await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/purchase/${item.id}`)
+    item.isAdded = false
+    cartItems.value = cartItems.value.filter((cartItem) => cartItem.id !== item.id)
+    console.log('Item removed from cart:', data)
+  } catch (error) {
+    console.error('Error removing item from cart:', error)
+  }
 }
 
 const onClickToAdd = (item) => {
@@ -134,6 +154,7 @@ watch(filters, async () => {
 provide('addToFavorite', addToFavorite)
 provide('onClickDrawerOpen', onClickDrawerOpen)
 provide('cartItems', cartItems)
+provide('items', items)
 </script>
 
 <template>
@@ -144,31 +165,30 @@ provide('cartItems', cartItems)
     @delete-from-cart="deleteFromCart"
     v-if="drawerOpen"
   />
-  <div>
-    <div class="flex justify-between items-center m-8">
-      <h2 class="text-3xl font-bold">Все кроссовки</h2>
-      <div class="flex items-center space-x-4">
-        <select
-          @change="changeSortBy"
-          class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none"
-        >
-          <option value="name">По названию</option>
-          <option value="price">По возрастанию (дешевле)</option>
-          <option value="-price">По убыванию (дороже)</option>
-        </select>
-        <div class="relative">
-          <input
-            @input="changeSearch"
-            class="border border-slate-200 rounded-lg pl-10 py-2 pr-4 outline-none focus:border-slate-400"
-            type="text"
-            placeholder="Поиск..."
-          />
-          <img
-            class="absolute left-3 top-1/2 transform -translate-y-1/2"
-            src="/search.svg"
-            alt="search"
-          />
-        </div>
+  <div v-auto-animate class="flex justify-between items-center m-8">
+    <h2 class="text-3xl font-bold">Все кроссовки</h2>
+    <div class="flex items-center space-x-4">
+      <select
+        v-auto-animate
+        @change="changeSortBy"
+        class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none"
+      >
+        <option value="name">По названию</option>
+        <option value="price">По возрастанию (дешевле)</option>
+        <option value="-price">По убыванию (дороже)</option>
+      </select>
+      <div class="relative">
+        <input
+          @input="changeSearch"
+          class="border border-slate-200 rounded-lg pl-10 py-2 pr-4 outline-none focus:border-slate-400"
+          type="text"
+          placeholder="Поиск..."
+        />
+        <img
+          class="absolute left-3 top-1/2 transform -translate-y-1/2"
+          src="/search.svg"
+          alt="search"
+        />
       </div>
     </div>
   </div>
