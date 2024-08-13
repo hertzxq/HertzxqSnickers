@@ -1,3 +1,13 @@
+<template>
+  <Header />
+  <div>
+    <div v-auto-animate class="flex justify-between items-center m-8">
+      <h2 class="text-3xl font-bold">Мои закладки</h2>
+    </div>
+  </div>
+  <CartList :items="itemsDataFromFavorites" @add-to-favorite="addToFavorite" :show-add-button="false" />
+</template>
+
 <script setup>
 import Header from '@/components/Header.vue'
 import CartList from '@/components/Carts/CartList.vue'
@@ -25,17 +35,36 @@ const fetchFavoriteItems = async () => {
   }
 }
 
-onMounted(() => {
-  fetchFavoriteItems()
-})
-</script>
+const addToFavorite = async (item) => {
+  try {
+    if (item.isFavorite) {
+      // Удаление из избранного
+      await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
+      
+      // Локальное обновление состояния
+      item.isFavorite = false
+      item.favoriteId = null
+      
+      // Удаление из локального списка избранных
+      itemsDataFromFavorites.value = itemsDataFromFavorites.value.filter(i => i.id !== item.id)
+    } else {
+      // Добавление в избранное
+      const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, { item_id: item.id })
+      
+      // Локальное обновление состояния
+      item.isFavorite = true
+      item.favoriteId = data.id
+      
+      // Добавление в локальный список избранных
+      itemsDataFromFavorites.value.push(item)
+    }
 
-<template>
-  <Header />
-  <div>
-    <div v-auto-animate class="flex justify-between items-center m-8">
-      <h2 class="text-3xl font-bold">Мои закладки</h2>
-    </div>
-  </div>
-  <CartList :items="itemsDataFromFavorites" />
-</template>
+  } catch (err) {
+    console.log('Error:', err)
+  }
+}
+
+
+
+onMounted(fetchFavoriteItems)
+</script>

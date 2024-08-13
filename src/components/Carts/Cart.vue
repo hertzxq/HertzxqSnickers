@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-const props = defineProps({
+defineProps({
   id: Number,
   title: String,
   img: String,
@@ -8,7 +8,8 @@ const props = defineProps({
   isFavorite: Boolean,
   isAdded: Boolean,
   onClickFavorite: Function,
-  onClickToAdd: Function
+  onClickToAdd: Function,
+  showAddButton: Boolean
 })
 </script>
 
@@ -23,14 +24,14 @@ const props = defineProps({
         alt="Favorite"
       />
     </div>
-    <img :src="img" class="w-40" alt="Sneaker" @click="console.log(props.id)" />
+    <img :src="img" class="w-40" alt="Sneaker" />
     <p class="font-bold">{{ title }}</p>
     <div class="flex justify-between mt-5">
       <div class="flex flex-col gap-2">
         <span class="text-slate-200">Цена:</span>
         <span class="font-bold">{{ price }} ₽.</span>
       </div>
-      <button>
+      <button v-if="showAddButton">
         <img @click="onClickToAdd" :src="isAdded ? '/plus-2.svg' : '/plus-1.svg'" alt="Plus" />
       </button>
     </div>

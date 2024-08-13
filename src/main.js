@@ -7,10 +7,12 @@ import './assets/main.css'
 
 import HomePage from './Pages/HomePage.vue'
 import FavoritePage from './Pages/FavoritePage.vue'
+import Profile from './Pages/Profile.vue'
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/favorites', component: FavoritePage }
+  { path: '/favorites', component: FavoritePage },
+  { path: '/profile', component: Profile}
 ]
 
 const router = createRouter({

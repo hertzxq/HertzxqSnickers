@@ -25,18 +25,19 @@ const onClickDrawerOpen = inject('onClickDrawerOpen')
   ></div>
   <div
     class="bg-white w-96 h-full fixed top-0 right-0 z-20 p-8 flex flex-col justify-between"
-    v-auto-animate
   >
     <CartHeader v-if="props.cartItems.length" />
     <EmptyDrawer v-if="!props.cartItems.length" />
     <CartDrawer
-      v-for="item in props.cartItems"
+      v-for="item in props.cartItems.slice(0, 3)"
       :key="item.id"
       :title="item.title"
       :img="item.imageUrl"
       :price="item.price"
       :deleteFromCart="() => emit('deleteFromCart', item)"
     />
+
+
     <DrawerCart v-if="props.cartItems.length" :drawerPrice="drawerPrice" />
   </div>
 </template>

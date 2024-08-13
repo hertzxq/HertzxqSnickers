@@ -2,7 +2,8 @@
 import Cart from './Cart.vue'
 
 defineProps({
-  items: Array
+  items: Array,
+  showAddButton: Boolean
 })
 
 const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
@@ -21,6 +22,7 @@ const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
       :isAdded="item.isAdded"
       :onClickFavorite="() => emit('addToFavorite', item)"
       :onClickToAdd="() => emit('onClickToAdd', item)"
+      :showAddButton="showAddButton"
     />
   </div>
 </template>

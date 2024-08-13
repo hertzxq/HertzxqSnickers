@@ -99,28 +99,13 @@ const addToFavorite = async (item) => {
 }
 
 const addToCart = async (item) => {
-  try {
-    const { data } = await axios.post('https://3a4fbd5d3da59fc8.mokky.dev/purchase', {
-      id: item.id,
-      title: item.title,
-      price: item.price
-    })
-    item.isAdded = true
-    console.log('Item added to cart:', data)
-  } catch (error) {
-    console.error('Error adding item to cart:', error)
-  }
+  cartItems.value.push(item)
+  item.isAdded = true
 }
 
 const deleteFromCart = async (item) => {
-  try {
-    const { data } = await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/purchase/${item.id}`)
-    item.isAdded = false
-    cartItems.value = cartItems.value.filter((cartItem) => cartItem.id !== item.id)
-    console.log('Item removed from cart:', data)
-  } catch (error) {
-    console.error('Error removing item from cart:', error)
-  }
+  cartItems.value.splice(cartItems.value.indexOf(item), 1)
+  item.isAdded = false
 }
 
 const onClickToAdd = (item) => {
@@ -192,5 +177,5 @@ provide('items', items)
       </div>
     </div>
   </div>
-  <CartList :items="items" @add-to-favorite="addToFavorite" @on-click-to-add="onClickToAdd" />
+  <CartList :items="items" @add-to-favorite="addToFavorite" @on-click-to-add="onClickToAdd" :show-add-button="true" />
 </template>

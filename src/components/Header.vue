@@ -17,9 +17,7 @@ defineProps({
     </div>
     <ul class="flex items-center gap-10 mr-20">
       <li class="flex items-center gap-5 text-slate-500">
-        <router-link to="/"
-          ><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen"
-        /></router-link>
+        <router-link to="/"><img src="/cart.svg" alt="cart" @click="onClickDrawerOpen"/></router-link>
         <router-link to="/">
           <b class="hover:text-stone-700" @click="onClickDrawerOpen"
             >{{ drawerPrice }} <span v-if="drawerPrice >= 0">₽.</span></b
@@ -33,8 +31,8 @@ defineProps({
         >
       </li>
       <li class="flex items-center gap-5 text-slate-500">
-        <a href="/profile"><img src="/profile.svg" alt="profile" /></a>
-        <a href="/profile"><span class="hover:text-stone-700">Профиль</span></a>
+        <router-link to="/profile"><img src="/profile.svg" alt="profile" /></router-link>
+        <router-link to="/profile"><span class="hover:text-stone-700">Профиль</span></router-link>
       </li>
     </ul>
   </header>
