@@ -149,22 +149,22 @@ provide('items', items)
     @delete-from-cart="deleteFromCart"
     v-if="drawerOpen"
   />
-  <div v-auto-animate class="flex justify-between items-center m-8 ">
-    <h2 class="text-3xl font-bold">Все кроссовки</h2>
-    <div class="flex items-center space-x-4 ">
+  <div v-auto-animate class="flex flex-col lg:flex-row justify-between items-center m-4 lg:m-8 space-y-4 lg:space-y-0">
+    <h2 class="text-2xl lg:text-3xl font-bold">Все кроссовки</h2>
+    <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4">
       <select
         v-auto-animate
         @change="changeSortBy"
-        class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none"
+        class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none w-full lg:w-auto"
       >
         <option value="name">По названию</option>
         <option value="price">По возрастанию (дешевле)</option>
         <option value="-price">По убыванию (дороже)</option>
       </select>
-      <div class="relative">
+      <div class="relative w-full lg:w-auto">
         <input
           @input="changeSearch"
-          class="border border-slate-200 rounded-lg pl-10 py-2 pr-4 outline-none focus:border-slate-400"
+          class="border border-slate-200 rounded-lg pl-10 py-2 pr-4 outline-none focus:border-slate-400 w-full lg:w-auto"
           type="text"
           placeholder="Поиск..."
         />
@@ -176,5 +176,10 @@ provide('items', items)
       </div>
     </div>
   </div>
-  <CartList :items="items" @add-to-favorite="addToFavorite" @on-click-to-add="onClickToAdd" :show-add-button="true" />
+  <CartList
+    :items="items"
+    @add-to-favorite="addToFavorite"
+    @on-click-to-add="onClickToAdd"
+    :show-add-button="true"
+  />
 </template>
