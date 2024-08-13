@@ -150,12 +150,12 @@ provide('items', items)
     v-if="drawerOpen"
   />
   <div v-auto-animate class="flex justify-between items-center m-8 ">
-    <h2 class="text-3xl font-bold w-16 md:w-32 lg:w-48">Все кроссовки</h2>
+    <h2 class="text-3xl font-bold">Все кроссовки</h2>
     <div class="flex items-center space-x-4 ">
       <select
         v-auto-animate
         @change="changeSortBy"
-        class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none w-16 md:w-32 lg:w-48"
+        class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none"
       >
         <option value="name">По названию</option>
         <option value="price">По возрастанию (дешевле)</option>
