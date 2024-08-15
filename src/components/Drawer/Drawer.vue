@@ -22,7 +22,7 @@ const onClickDrawerOpen = inject('onClickDrawerOpen')
   <div
     class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10 cursor-pointer"
     @click="onClickDrawerOpen"
-  ></div>
+  />
   <div
     class="bg-white w-96 h-full fixed top-0 right-0 z-20 p-8 flex flex-col justify-between"
   >

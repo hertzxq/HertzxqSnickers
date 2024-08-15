@@ -12,7 +12,7 @@ import Profile from './Pages/Profile.vue'
 const routes = [
   { path: '/', component: HomePage },
   { path: '/favorites', component: FavoritePage },
-  { path: '/profile', component: Profile}
+  { path: '/profile', component: Profile},
 ]
 
 const router = createRouter({

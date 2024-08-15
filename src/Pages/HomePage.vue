@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import Header from '@/components/Header.vue'
 import CartList from '@/components/Carts/CartList.vue'
 import Drawer from '@/components/Drawer/Drawer.vue'
+import SnickersDrawer from '@/components/Snickers/SnickersDrawer.vue'
 
 const items = ref([])
 const cartItems = ref([])
@@ -15,10 +16,15 @@ const filters = reactive({
   search: ''
 })
 
-const drawerOpen = ref(false)
+const drawer = ref(false)
+const snickerDrawer = ref(false)
 
 const onClickDrawerOpen = () => {
-  drawerOpen.value = !drawerOpen.value
+  drawer.value = !drawer.value
+}
+
+const snickerDrawerOpen = () => {
+  snickerDrawer.value = !snickerDrawer.value
 }
 
 const changeSortBy = (event) => {
@@ -147,8 +153,9 @@ provide('items', items)
     :drawerPrice="totalAmount"
     :cartItems="cartItems"
     @delete-from-cart="deleteFromCart"
-    v-if="drawerOpen"
+    v-if="drawer"
   />
+  <SnickersDrawer v-if="snickerDrawer" :snickerDrawerOpen="snickerDrawerOpen" />
   <div v-auto-animate class="flex flex-col lg:flex-row justify-between items-center m-4 lg:m-8 space-y-4 lg:space-y-0">
     <h2 class="text-2xl lg:text-3xl font-bold">Все кроссовки</h2>
     <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4">
@@ -181,5 +188,6 @@ provide('items', items)
     @add-to-favorite="addToFavorite"
     @on-click-to-add="onClickToAdd"
     :show-add-button="true"
+    :snickerDrawerOpen="snickerDrawerOpen"
   />
 </template>

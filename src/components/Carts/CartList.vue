@@ -3,7 +3,8 @@ import Cart from './Cart.vue'
 
 defineProps({
   items: Array,
-  showAddButton: Boolean
+  showAddButton: Boolean,
+  snickerDrawerOpen: Boolean
 })
 
 const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
@@ -23,6 +24,7 @@ const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
       :onClickFavorite="() => emit('addToFavorite', item)"
       :onClickToAdd="() => emit('onClickToAdd', item)"
       :showAddButton="showAddButton"
+      :snickerDrawerOpen="snickerDrawerOpen"
     />
   </div>
 </template>
