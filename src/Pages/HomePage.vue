@@ -10,6 +10,8 @@ import SnickersDrawer from '@/components/Snickers/SnickersDrawer.vue'
 
 const items = ref([])
 const cartItems = ref([])
+const selectedItem = ref([])
+
 
 const filters = reactive({
   sortBy: '',
@@ -23,7 +25,8 @@ const onClickDrawerOpen = () => {
   drawer.value = !drawer.value
 }
 
-const snickerDrawerOpen = () => {
+const snickerDrawerOpen = (item) => {
+  selectedItem.value = item
   snickerDrawer.value = !snickerDrawer.value
 }
 
@@ -155,7 +158,10 @@ provide('items', items)
     @delete-from-cart="deleteFromCart"
     v-if="drawer"
   />
-  <SnickersDrawer v-if="snickerDrawer" :snickerDrawerOpen="snickerDrawerOpen" />
+  <SnickersDrawer
+    :selectedItem="selectedItem"
+    v-if="snickerDrawer"
+    :snickerDrawerOpen="snickerDrawerOpen" />
   <div v-auto-animate class="flex flex-col lg:flex-row justify-between items-center m-4 lg:m-8 space-y-4 lg:space-y-0">
     <h2 class="text-2xl lg:text-3xl font-bold">Все кроссовки</h2>
     <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4">

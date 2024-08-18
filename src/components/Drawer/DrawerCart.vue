@@ -2,11 +2,15 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  drawerPrice: {
-    type: Number,
-    default: 0
+  drawerPrice: Number,
+  cartItems: {
+    type: Array
   }
 })
+
+function onClickBuy() {
+  alert('Заказ оформлен')
+}
 
 const taxRate = 0.05
 const taxAmount = computed(() => props.drawerPrice * taxRate)
@@ -24,6 +28,8 @@ Math.round(taxAmount.value)
       <span>{{ Math.round(taxAmount) }} ₽.</span>
     </div>
     <button
+    @click="onClickBuy"
+      v-if="!props.cartItems.length < 3"
       class="flex items-center gap-8 w-full border border-slate-200 rounded-xl p-4 mt-8 justify-center bg-drawerButton disabled:bg-slate-400 cursor-pointer text-white transition hover:bg-lime-500 active:bg-lime-700"
     >
       Оформить заказ

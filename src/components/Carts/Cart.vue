@@ -9,9 +9,12 @@ defineProps({
   isAdded: Boolean,
   onClickFavorite: Function,
   onClickToAdd: Function,
-  showAddButton: Boolean,
-  snickerDrawerOpen: Boolean
+  snickerDrawerOpen: Function,
+  showAddButton: Boolean
 })
+
+defineEmits(['snickerDrawerOpen']);
+
 
 </script>
 
@@ -26,10 +29,10 @@ defineProps({
         alt="Favorite"
       />
     </div>
-    <img :src="img" class="w-40" alt="Sneaker" @click="snickerDrawerOpen" />
-    <p class="font-bold" @click="snickerDrawerOpen">{{ title }}</p>
+    <img :src="img" class="w-40" alt="Sneaker" @click="() => snickerDrawerOpen({ id, title, img, price })" />
+    <p class="font-bold" @click="() => snickerDrawerOpen({ id, title, img, price })">{{ title }}</p>
     <div class="flex justify-between mt-5">
-      <div class="flex flex-col gap-2" @click="snickerDrawerOpen">
+      <div class="flex flex-col gap-2" @click="() => snickerDrawerOpen({ id, title, img, price })">
         <span class="text-slate-200">Цена:</span>
         <span class="font-bold">{{ price }} ₽.</span>
       </div>
@@ -39,3 +42,4 @@ defineProps({
     </div>
   </div>
 </template>
+

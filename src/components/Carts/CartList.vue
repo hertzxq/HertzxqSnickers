@@ -23,8 +23,10 @@ const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
       :isAdded="item.isAdded"
       :onClickFavorite="() => emit('addToFavorite', item)"
       :onClickToAdd="() => emit('onClickToAdd', item)"
+      :onClick="() => emit('snickerDrawerOpen', item)"
       :showAddButton="showAddButton"
       :snickerDrawerOpen="snickerDrawerOpen"
     />
   </div>
 </template>
+

@@ -4,8 +4,24 @@ import Header from '@/components/Header.vue';
 </script>
 <template>
     <Header />
-    <div class="w-4/5 m-auto h-64 mt-64">
-        <h1 class="text-3xl text-center pt-10">Профиля не будет, у разрабa комплекс неполноцености появился пока он писал это</h1>
-        <p class=" text-center pt-5">я сегодня турнир по фортнайту проиграл поэтому 52 ребята, продолждение за банку протеина сделаю наверное</p>
+    <div class="w-full m-auto">
+        <div class="w-60 m-auto mt-24 mb-24">
+            <h1 class="text-3xl">Личный кабинет</h1>
+        </div>
+        <div class="w-60 h-60 m-auto">
+            <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="">
+        </div>
+        <div class="w-60 m-auto mt-16 mb-24">
+            <p class="text-3xl ml-20">Гость</p>
+            <button
+        class="gap-8 w-full border border-slate-200 rounded-xl p-4 mt-8
+        justify-center bg-drawerButton disabled:bg-slate-400
+        cursor-pointer text-white transition hover:bg-lime-500 active:bg-lime-700 pt-4"
+        >
+        Зарегистрироваться
+    </button>
+        </div>
+        <div class=" text-white ">.</div>
     </div>
+
 </template>

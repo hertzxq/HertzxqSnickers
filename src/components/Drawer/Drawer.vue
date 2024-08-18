@@ -38,6 +38,10 @@ const onClickDrawerOpen = inject('onClickDrawerOpen')
     />
 
 
-    <DrawerCart v-if="props.cartItems.length" :drawerPrice="drawerPrice" />
+    <DrawerCart
+    v-if="props.cartItems.length"
+    :drawerPrice="drawerPrice"
+    cartItems="props.cartItems"
+    />
   </div>
 </template>
