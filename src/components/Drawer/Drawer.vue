@@ -4,7 +4,7 @@ import CartHeader from '../Carts/CartHeader.vue'
 import CartDrawer from './CartDrawer.vue'
 import DrawerCart from './DrawerCart.vue'
 import EmptyDrawer from './EmptyDrawer.vue'
-import { inject } from 'vue'
+import { inject, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   cartItems: {
@@ -13,6 +13,14 @@ const props = defineProps({
   },
   drawerPrice: Number
 })
+
+onMounted(() => {
+  document.body.classList.add('overflow-hidden');
+});
+
+onUnmounted(() => {
+  document.body.classList.remove('overflow-hidden');
+});
 
 const emit = defineEmits(['deleteFromCart', 'drawerPrice'])
 const onClickDrawerOpen = inject('onClickDrawerOpen')
@@ -26,22 +34,31 @@ const onClickDrawerOpen = inject('onClickDrawerOpen')
   <div
     class="bg-white w-96 h-full fixed top-0 right-0 z-20 p-8 flex flex-col justify-between"
   >
+    <!-- Заголовок корзины -->
     <CartHeader v-if="props.cartItems.length" />
+
+    <!-- Пустая корзина -->
     <EmptyDrawer v-if="!props.cartItems.length" />
-    <CartDrawer
-      v-for="item in props.cartItems.slice(0, 3)"
-      :key="item.id"
-      :title="item.title"
-      :img="item.imageUrl"
-      :price="item.price"
-      :deleteFromCart="() => emit('deleteFromCart', item)"
-    />
 
+    <!-- Контейнер для прокрутки товаров -->
+    <div class="flex-grow overflow-y-auto">
+      <!-- Товары в корзине -->
+      <CartDrawer
+        v-for="item in props.cartItems"
+        :key="item.id"
+        :title="item.title"
+        :img="item.imageUrl"
+        :price="item.price"
+        :deleteFromCart="() => emit('deleteFromCart', item)"
+      />
+    </div>
 
+    <!-- Итоговая часть корзины -->
     <DrawerCart
-    v-if="props.cartItems.length"
-    :drawerPrice="drawerPrice"
-    cartItems="props.cartItems"
+      v-if="props.cartItems.length"
+      :drawerPrice="drawerPrice"
+      cartItems="props.cartItems"
     />
   </div>
 </template>
+

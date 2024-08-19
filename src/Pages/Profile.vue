@@ -13,13 +13,15 @@ import Header from '@/components/Header.vue';
         </div>
         <div class="w-60 m-auto mt-16 mb-24">
             <p class="text-3xl ml-20">Гость</p>
-            <button
-        class="gap-8 w-full border border-slate-200 rounded-xl p-4 mt-8
-        justify-center bg-drawerButton disabled:bg-slate-400
-        cursor-pointer text-white transition hover:bg-lime-500 active:bg-lime-700 pt-4"
-        >
-        Зарегистрироваться
-    </button>
+            <router-link to="/registration">
+                <button
+                    class="gap-8 w-full border border-slate-200 rounded-xl p-4 mt-16
+                    justify-center bg-drawerButton disabled:bg-slate-400
+                    cursor-pointer text-white transition hover:bg-lime-500 active:bg-lime-700 pt-4"
+                    >
+                    Зарегистрироваться
+                </button>
+        </router-link>
         </div>
         <div class=" text-white ">.</div>
     </div>

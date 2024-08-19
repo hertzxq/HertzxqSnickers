@@ -9,10 +9,15 @@ import HomePage from './Pages/HomePage.vue'
 import FavoritePage from './Pages/FavoritePage.vue'
 import Profile from './Pages/Profile.vue'
 
+import Registration from './Pages/Registration.vue'
+import Login from './Pages/Login.vue'
+
 const routes = [
   { path: '/', component: HomePage },
   { path: '/favorites', component: FavoritePage },
   { path: '/profile', component: Profile},
+  { path: '/registration', component: Registration},
+  { path: '/login', component: Login},
 ]
 
 const router = createRouter({
