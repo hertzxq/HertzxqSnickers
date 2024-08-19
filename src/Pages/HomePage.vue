@@ -28,13 +28,10 @@ const onClickDrawerOpen = () => {
 const snickerDrawerOpen = (item) => {
   selectedItem.value = item
   snickerDrawer.value = !snickerDrawer.value
-  console.log(selectedItem.value);
-  
 }
 
 const changeSortBy = (event) => {
   filters.sortBy = event.target.value
-  console.log(event.target.value)
 }
 
 const changeSearch = (event) => {
@@ -91,18 +88,13 @@ const addToFavorite = async (item) => {
       const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj)
 
       item.favoriteId = data.id
-      console.log('Added to favorites:', data)
     } else {
       if (item.favoriteId) {
         await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
-        console.log('Deleted from favorites:', item.favoriteId)
         item.isFavorite = false
         item.favoriteId = null
-      } else {
-        console.log('No favoriteId found for item:', item)
       }
     }
-    console.log(item)
   } catch (err) {
     console.log('Error:', err)
   }
