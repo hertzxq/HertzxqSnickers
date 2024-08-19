@@ -25,6 +25,7 @@ import SnickersBody from './SnickersBody.vue'
         :title="selectedItem.title"
         :image="selectedItem.img"
         :price="selectedItem.price"
+        :subtitle="selectedItem.subtitle"
       />
     </div>
   </div>

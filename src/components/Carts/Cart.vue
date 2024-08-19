@@ -5,6 +5,7 @@ defineProps({
   title: String,
   img: String,
   price: Number,
+  subtitle: String,
   isFavorite: Boolean,
   isAdded: Boolean,
   onClickFavorite: Function,
@@ -29,10 +30,10 @@ defineEmits(['snickerDrawerOpen']);
         alt="Favorite"
       />
     </div>
-    <img :src="img" class="w-40" alt="Sneaker" @click="() => snickerDrawerOpen({ id, title, img, price })" />
-    <p class="font-bold" @click="() => snickerDrawerOpen({ id, title, img, price })">{{ title }}</p>
+    <img :src="img" class="w-40" alt="Sneaker" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })" />
+    <p class="font-bold" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })">{{ title }}</p>
     <div class="flex justify-between mt-5">
-      <div class="flex flex-col gap-2" @click="() => snickerDrawerOpen({ id, title, img, price })">
+      <div class="flex flex-col gap-2" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })">
         <span class="text-slate-200">Цена:</span>
         <span class="font-bold">{{ price }} ₽.</span>
       </div>

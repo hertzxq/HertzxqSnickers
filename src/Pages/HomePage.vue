@@ -28,6 +28,8 @@ const onClickDrawerOpen = () => {
 const snickerDrawerOpen = (item) => {
   selectedItem.value = item
   snickerDrawer.value = !snickerDrawer.value
+  console.log(selectedItem.value);
+  
 }
 
 const changeSortBy = (event) => {

@@ -18,6 +18,7 @@ const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
       :title="item.title"
       :img="item.imageUrl"
       :price="item.price"
+      :subtitle="item.subtitle"
       :id="item.id"
       :isFavorite="item.isFavorite"
       :isAdded="item.isAdded"

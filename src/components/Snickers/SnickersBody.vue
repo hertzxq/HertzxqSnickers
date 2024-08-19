@@ -3,7 +3,8 @@ defineProps({
     id: Number,
     title: String,
     image: String,
-    price: Number
+    price: Number,
+    subtitle: String
 })
 
 
@@ -19,9 +20,5 @@ defineProps({
 <div class="flex justify-start">
     <p class="text-slate-400 text-xl mt-2">{{ price }} ₽</p>
 </div>
-<div class="flex text-center mt-8 mb-16 text-slate-400 w-42">
-    Кроссовки Nike – это стильная и высокотехнологичная обувь, 
-    сочетающая в себе передовые технологии и уникальный дизайн. Они известны своим комфортом, 
-    легкостью и долговечностью, что делает их идеальными как для спортивных занятий, так и для повседневной носки..
-</div>
+<div class="flex text-center mt-8 mb-16 text-slate-400 w-42">{{ subtitle }}</div>
 </template>
