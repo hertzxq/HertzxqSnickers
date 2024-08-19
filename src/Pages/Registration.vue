@@ -8,43 +8,44 @@ const userName = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 
-const autorization = async () => {
+const registation = async () => {
 
-    if (password.value !== confirmPassword.value) {
-        alert('Пароли не совпадают')
-    }
-
-    try {
-        const res = await axios.post('https://9303851354d5e8f0.mokky.dev/register', {
-            username: userName.value,
-            password: password.value
-        }, {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
+            if (password.value !== confirmPassword.value) {
+                alert('Пароли не совпадают');
+                return;
             }
-        })
 
-        console.log(res.data);
-        alert('Вы успешно зарегистрировались!');
-    } catch (err) {
-        console.log(err)
-    }
+            try {
+                const res = await axios.post('https://9303851354d5e8f0.mokky.dev/register', {
+                    username: userName.value,
+                    password: password.value
+                }, {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                });
 
-    
-}
+                console.log(res.data);
+                alert('Вы успешно зарегистрировались!');
+            } catch (err) {
+                console.error(err);
+                alert('Произошла ошибка при регистрации.');
+            }
+        };
 
 </script>
 
 <template>
     <Header />
-    <div class="w-full h-full m-auto min-h-screen flex items-center justify-center">
+    <div class="w-min-full h-min-full m-auto min-h-screen flex items-center justify-center">
         <div class="w-11/12 md:w-1/2 lg:w-1/3 m-auto bg-white rounded-xl p-8 shadow-lg">
             <h1 class="text-3xl text-center mb-8">Регистрация</h1>
-            <form @submit.prevent="autorization">
+            <form @submit.prevent="registation">
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Имя пользователя</label>
                     <input
+                        v-model="username"
                         type="text"
                         id="username"
                         class=
@@ -59,6 +60,7 @@ const autorization = async () => {
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Пароль</label>
                     <input
+                        v-model="password"
                         type="password"
                         id="password"
                         class="text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400
@@ -72,6 +74,7 @@ const autorization = async () => {
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Подтвердите пароль</label>
                     <input
+                        v-model="confirmPassword"
                         type="password"
                         id="confirmPassword"
                         class="text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400

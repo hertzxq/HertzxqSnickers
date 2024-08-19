@@ -30,4 +30,16 @@ import SnickersBody from './SnickersBody.vue'
   </div>
 </template>
 
+<style scoped>
+button {
+  position: relative;
+  z-index: 30;
+  cursor: pointer;
+}
+
+.fixed {
+  touch-action: none; 
+}
+</style>
+
   
