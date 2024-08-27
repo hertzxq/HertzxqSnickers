@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import Swal from 'sweetalert2'
 
 const props = defineProps({
   drawerPrice: Number,
@@ -8,9 +9,17 @@ const props = defineProps({
   }
 })
 
+
 function onClickBuy() {
-  alert('Заказ оформлен')
+  Swal.fire({
+  position: "center",
+  icon: "success",
+  title: "Заказ оформлен!",
+  showConfirmButton: false,
+  timer: 1500
+});
 }
+
 
 const taxRate = 0.05
 const taxAmount = computed(() => props.drawerPrice * taxRate)

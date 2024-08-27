@@ -91,6 +91,7 @@ const addToFavorite = async (item) => {
     } else {
       if (item.favoriteId) {
         await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
+
         item.isFavorite = false
         item.favoriteId = null
       }

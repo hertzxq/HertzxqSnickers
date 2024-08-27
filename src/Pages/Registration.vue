@@ -1,39 +1,50 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import Header from '@/components/Header.vue';
-import axios from 'axios';
 import { ref } from 'vue';
 
-const userName = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+const userName = ref('');
+const password = ref('');
+const confirmPassword = ref('');
 
-const registation = async () => {
+const registration = async () => {
+    if (password.value !== confirmPassword.value) {
+        alert('Пароли не совпадают');
+        return;
+    }
+    
+    try {
+        const res = await fetch("https://3a4fbd5d3da59fc8.mokky.dev/register", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: userName.value,
+                password: password.value
+            })
+        });
 
-            if (password.value !== confirmPassword.value) {
-                alert('Пароли не совпадают');
-                return;
-            }
+        if (!res.ok) {
+            throw new Error(`Ошибка: ${res.status}`);
+        }
 
-            try {
-                const res = await axios.post('https://9303851354d5e8f0.mokky.dev/register', {
-                    username: userName.value,
-                    password: password.value
-                }, {
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                });
+        const data = await res.json();
+        console.log(data);
 
-                console.log(res.data);
-                alert('Вы успешно зарегистрировались!');
-            } catch (err) {
-                console.error(err);
-                alert('Произошла ошибка при регистрации.');
-            }
-        };
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+            alert('Вы успешно зарегистрировались!');
+        } else {
+            alert('Не удалось получить токен при регистрации.');
+        }
 
+    } catch (err) {
+        console.error('Произошла ошибка при регистрации:', err);
+        alert('Ошибка при регистрации. Пожалуйста, попробуйте снова.');
+    }
+};
 </script>
 
 <template>
@@ -41,15 +52,14 @@ const registation = async () => {
     <div class="w-min-full h-min-full m-auto min-h-screen flex items-center justify-center">
         <div class="w-11/12 md:w-1/2 lg:w-1/3 m-auto bg-white rounded-xl p-8 shadow-lg">
             <h1 class="text-3xl text-center mb-8">Регистрация</h1>
-            <form @submit.prevent="registation">
+            <form @submit.prevent="registration">
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Имя пользователя</label>
                     <input
-                        v-model="username"
+                        v-model="userName"
                         type="text"
                         id="username"
-                        class=
-                        "text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400
+                        class="text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400
                                disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
                                invalid:border-pink-500 invalid:text-pink-600
                                focus:invalid:border-pink-500 focus:invalid:ring-pink-500"

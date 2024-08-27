@@ -2,32 +2,43 @@
 <script setup>
 import Header from '@/components/Header.vue';
 import { ref } from 'vue';
-import axios from 'axios';
 
-const userName = ref('')
-const password = ref('')
+const userName = ref('');
+const password = ref('');
 
-const autinication = async () => {
+const authentication = async () => {
+    try {
+        const res = await fetch("https://3a4fbd5d3da59fc8.mokky.dev/auth", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: userName.value,
+                password: password.value
+            })
+        });
 
-try {
-    const res = await axios.post('https://3a4fbd5d3da59fc8.mokky.dev/auth', {
-        username: userName.value,
-        password: password.value
-    }, {
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        },
-    });
+        if (!res.ok) {
+            throw new Error(`Ошибка: ${res.status}`);
+        }
 
-    console.log(res.data);
-    alert('Вы успешно зарегистрировались!');
-} catch (err) {
-    console.error(err);
-    alert('Произошла ошибка при регистрации.');
-}
+        const data = await res.json();
+        console.log(data);
+
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+            alert('Вы успешно вошли в систему!');
+        } else {
+            alert('Не удалось получить токен аутентификации.');
+        }
+
+    } catch (err) {
+        console.error('Произошла ошибка:', err);
+        alert('Ошибка при входе. Проверьте данные и попробуйте снова.');
+    }
 };
-
 </script>
 
 <template>
@@ -35,10 +46,11 @@ try {
     <div class="w-full h-full m-auto min-h-screen flex items-center justify-center">
         <div class="w-11/12 md:w-1/2 lg:w-1/3 m-auto bg-white rounded-xl p-8 shadow-lg">
             <h1 class="text-3xl text-center mb-8">Вход</h1>
-            <form @submit.prevent="autinication">
+            <form @submit.prevent="authentication">
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Имя пользователя</label>
                     <input
+                        v-model="userName"
                         type="text"
                         class="text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400
                                disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
@@ -51,6 +63,7 @@ try {
                 <div class="mb-4">
                     <label class="text-lg block font-medium text-slate-700">Пароль</label>
                     <input
+                        v-model="password"
                         type="password"
                         class="text-base mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400
                                disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
@@ -65,7 +78,7 @@ try {
                            justify-center bg-drawerButton disabled:bg-slate-400
                            cursor-pointer text-white transition hover:bg-lime-500
                            active:bg-lime-700 pt-4"
-                >Зарегистрироваться</button>
+                >Войти</button>
                 
                 <div class="text-center mt-4">
                     <span class="text-emerald-800 font-bold text-lg">Нет аккаунта?</span>

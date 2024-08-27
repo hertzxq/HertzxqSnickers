@@ -12,6 +12,10 @@ import Profile from './Pages/Profile.vue'
 import Registration from './Pages/Registration.vue'
 import Login from './Pages/Login.vue'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+
 const routes = [
   { path: '/', component: HomePage },
   { path: '/favorites', component: FavoritePage },
@@ -28,4 +32,5 @@ const router = createRouter({
 const app = createApp(App)
 app.use(autoAnimatePlugin)
 app.use(router)
+app.use(VueSweetalert2);
 app.mount('#app')
