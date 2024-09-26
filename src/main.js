@@ -1,16 +1,13 @@
 import { createApp } from 'vue'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { createWebHistory, createRouter } from 'vue-router'
+import { createPinia } from 'pinia';
 
 import App from './App.vue'
 import './assets/main.css'
 
 import HomePage from './Pages/HomePage.vue'
 import FavoritePage from './Pages/FavoritePage.vue'
-import Profile from './Pages/Profile.vue'
-
-import Registration from './Pages/Registration.vue'
-import Login from './Pages/Login.vue'
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -19,9 +16,6 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 const routes = [
   { path: '/', component: HomePage },
   { path: '/favorites', component: FavoritePage },
-  { path: '/profile', component: Profile},
-  { path: '/registration', component: Registration},
-  { path: '/login', component: Login},
 ]
 
 const router = createRouter({
@@ -33,4 +27,5 @@ const app = createApp(App)
 app.use(autoAnimatePlugin)
 app.use(router)
 app.use(VueSweetalert2);
+app.use(createPinia());
 app.mount('#app')

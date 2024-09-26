@@ -3,15 +3,16 @@ import { onMounted, reactive, provide, watch, computed } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
+import { useItemsStore } from '@/components/stores/items'
+
 import Header from '@/components/Header.vue'
 import CartList from '@/components/Carts/CartList.vue'
 import Drawer from '@/components/Drawer/Drawer.vue'
 import SnickersDrawer from '@/components/Snickers/SnickersDrawer.vue'
 
-const items = ref([])
 const cartItems = ref([])
-const selectedItem = ref([])
-
+const selectedItem = ref(null)
+const items = useItemsStore()
 
 const filters = reactive({
   sortBy: '',
@@ -32,6 +33,7 @@ const snickerDrawerOpen = (item) => {
 
 const changeSortBy = (event) => {
   filters.sortBy = event.target.value
+  console.log('filters.sortBy:', filters.sortBy)
 }
 
 const changeSearch = (event) => {
@@ -41,8 +43,8 @@ const changeSearch = (event) => {
 const fetchFavoriteItems = async () => {
   try {
     const { data: favorites } = await axios.get(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`)
-
-    items.value = items.value.map((item) => {
+    console.log('items.items.value перед map:', items.items.value)
+    items.items.value = items.items.value.map((item) => {
       const favorite = favorites.find((favorite) => favorite.item_id === item.id)
 
       if (!favorite) {
@@ -57,22 +59,6 @@ const fetchFavoriteItems = async () => {
     })
   } catch (err) {
     console.log(err)
-  }
-}
-
-const fetchItems = async () => {
-  try {
-    const { data } = await axios.get(
-      'https://3a4fbd5d3da59fc8.mokky.dev/sneackers?sortBy=' + filters.sortBy
-    )
-
-    items.value = data.map((item) => ({
-      ...item,
-      isFavorite: false,
-      isAdded: false
-    }))
-  } catch (error) {
-    console.log(error)
   }
 }
 
@@ -107,9 +93,13 @@ const addToCart = async (item) => {
 }
 
 const deleteFromCart = async (item) => {
-  cartItems.value.splice(cartItems.value.indexOf(item), 1)
-  item.isAdded = false
+  const index = cartItems.value.findIndex(cartItem => cartItem.id === item.id)
+  if (index !== -1) {
+    cartItems.value.splice(index, 1)
+    item.isAdded = false
+  }
 }
+
 
 const onClickToAdd = (item) => {
   if (!item.isAdded) {
@@ -124,20 +114,15 @@ const totalAmount = computed(() => {
 })
 
 onMounted(async () => {
-  await fetchItems(), await fetchFavoriteItems()
+  await items.fetchItems(filters);
+  await fetchFavoriteItems();
 })
-watch(filters, fetchItems)
 
 watch(filters, async () => {
-  try {
-    const { data } = await axios.get(
-      'https://3a4fbd5d3da59fc8.mokky.dev/sneackers?title=*' + filters.search + '*'
-    )
-    items.value = data
-  } catch (error) {
-    console.log(error)
-  }
+  await items.fetchItems(filters)
+  await fetchFavoriteItems()
 })
+
 
 provide('addToFavorite', addToFavorite)
 provide('onClickDrawerOpen', onClickDrawerOpen)
@@ -165,9 +150,9 @@ provide('items', items)
         @change="changeSortBy"
         class="border border-slate-200 rounded-lg cursor-pointer pl-4 py-2 outline-none w-full lg:w-auto"
       >
-        <option value="name">По названию</option>
-        <option value="price">По возрастанию (дешевле)</option>
-        <option value="-price">По убыванию (дороже)</option>
+        <option value="name">По названию (А-Я)</option>
+        <option value="price">По возрастанию цены</option>
+        <option value="-price">По убыванию цены</option>
       </select>
       <div class="relative w-full lg:w-auto">
         <input
@@ -185,7 +170,7 @@ provide('items', items)
     </div>
   </div>
   <CartList
-    :items="items"
+    :items="items.items"
     @add-to-favorite="addToFavorite"
     @on-click-to-add="onClickToAdd"
     :show-add-button="true"

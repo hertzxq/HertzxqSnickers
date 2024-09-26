@@ -1,13 +1,16 @@
 <script setup>
 import Cart from './Cart.vue'
 
-defineProps({
-  items: Array,
-  showAddButton: Boolean,
-  snickerDrawerOpen: Boolean
-})
 
-const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
+defineProps({
+  items: {
+    type: Array,
+    required: true,
+  },
+  showAddButton: Boolean,
+  snickerDrawerOpen: Boolean,
+  addToFavorite: Function,
+})
 </script>
 
 <template>
@@ -22,11 +25,11 @@ const emit = defineEmits(['addToFavorite', 'onClickToAdd'])
       :id="item.id"
       :isFavorite="item.isFavorite"
       :isAdded="item.isAdded"
-      :onClickFavorite="() => emit('addToFavorite', item)"
-      :onClickToAdd="() => emit('onClickToAdd', item)"
+      :onClickFavorite="() => emit('addToFavorite', $event)"
+      :onClickToAdd="() => emit('onClickToAdd', $event)"
       :onClick="() => emit('snickerDrawerOpen', item)"
       :showAddButton="showAddButton"
-      :snickerDrawerOpen="snickerDrawerOpen"
+      :snickerDrawerOpen="() => emit('snickerDrawerOpen', $event)"
     />
   </div>
 </template>

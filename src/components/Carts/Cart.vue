@@ -25,7 +25,7 @@ defineEmits(['snickerDrawerOpen']);
   >
     <div class="absolute top-8 left-8">
       <img
-        @click="onClickFavorite"
+        @click="emit('addToFavorite', item)"
         :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
         alt="Favorite"
       />
@@ -38,7 +38,7 @@ defineEmits(['snickerDrawerOpen']);
         <span class="font-bold">{{ price }} ₽.</span>
       </div>
       <button v-if="showAddButton">
-        <img @click="onClickToAdd" :src="isAdded ? '/plus-2.svg' : '/plus-1.svg'" alt="Plus" />
+        <img @click="emit('onClickToAdd', item)" :src="isAdded ? '/plus-2.svg' : '/plus-1.svg'" alt="Plus" />
       </button>
     </div>
   </div>
