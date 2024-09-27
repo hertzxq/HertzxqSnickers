@@ -7,7 +7,7 @@ import SkeletonPlaceholder from '../SkeletonPlaceholder.vue';
       class="relative flex flex-col w-full border border-slate-100 rounded-xl m-8 cursor-pointer transition hover:shadow-xl hover:transform hover:-translate-y-2"
     >
       <div class="w-full h-56 overflow-hidden rounded-lg">
-        <SkeletonPlaceholder height="200px" width="330px" border-radius="8%"/>
+        <SkeletonPlaceholder height="200px" width="360px" border-radius="8%"/>
       </div>
         <p class="font-bold text-xl m-auto"><SkeletonPlaceholder height="25px" width="150px" /></p>
       <div class="flex justify-between mt-5">
