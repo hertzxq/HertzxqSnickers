@@ -1,10 +1,10 @@
 <script setup>
-import Cart from './Cart.vue'
-import SkeletonCart from './SkeletonCart.vue'
+import Cart from './Cart.vue';
+import SkeletonCart from './SkeletonCart.vue';
 import { useItemsStore } from '../stores/items';
 import { ref } from 'vue';
 
-const itemsStore = useItemsStore()
+const itemsStore = useItemsStore();
 const itemsPerPage = ref(12);
 
 defineProps({
@@ -15,34 +15,40 @@ defineProps({
   showAddButton: Boolean,
   snickerDrawerOpen: Boolean,
   addToFavorite: Function,
-})
-// v-if="itemsStore.isLoading" 
+  onClickToAdd: Function
+});
+
+
 </script>
 
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" v-auto-animate>
-    <template v-for="i in itemsPerPage" :key="i">
-      <SkeletonCart v-if="itemsStore.isLoading" />
+    <!-- Если данные загружаются, показываем скелетоны -->
+    <template v-if="itemsStore.isLoading">
+      <SkeletonCart v-for="i in itemsPerPage" :key="i" />
+    </template>
+
+    <!-- Если данные загружены, показываем карточки -->
+    <template v-else>
       <Cart
-        v-else
-        v-for="item in items"
-        :key="item.id"
-        :title="item.title"
-        :img="item.imageUrl"
-        :price="item.price"
-        :subtitle="item.subtitle"
-        :id="item.id"
-        :isFavorite="item.isFavorite"
-        :isAdded="item.isAdded"
-        :onClickFavorite="() => emit('addToFavorite', $event)"
-        :onClickToAdd="() => emit('onClickToAdd', $event)"
-        :onClick="() => emit('snickerDrawerOpen', item)"
-        :showAddButton="showAddButton"
-        :snickerDrawerOpen="() => emit('snickerDrawerOpen', $event)"
-      />
+      v-for="item in items"
+      :key="item.id"
+      :title="item.title"
+      :img="item.imageUrl"
+      :price="item.price"
+      :subtitle="item.subtitle"
+      :id="item.id"
+      :isFavorite="item.isFavorite"
+      :isAdded="item.isAdded"
+      :addToFavorite="addToFavorite" 
+      :onClickToAdd="onClickToAdd"  
+      :snickerDrawerOpen="snickerDrawerOpen"
+      :showAddButton="showAddButton"
+    />
     </template>
   </div>
 </template>
+
 
 
 

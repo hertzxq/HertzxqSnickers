@@ -8,15 +8,11 @@ defineProps({
   subtitle: String,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onClickFavorite: Function,
-  onClickToAdd: Function,
-  snickerDrawerOpen: Function,
-  showAddButton: Boolean
-})
-
-defineEmits(['snickerDrawerOpen']);
-
-
+  addToFavorite: Function, 
+  onClickToAdd: Function, 
+  snickerDrawerOpen: Function, 
+  showAddButton: Boolean 
+});
 </script>
 
 <template>
@@ -25,22 +21,34 @@ defineEmits(['snickerDrawerOpen']);
   >
     <div class="absolute top-8 left-8">
       <img
-        @click="emit('addToFavorite', item)"
+        @click="addToFavorite({ id, title, img, price, subtitle, isFavorite })"
         :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
         alt="Favorite"
       />
     </div>
-    <img :src="img" class="w-40" alt="Sneaker" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })" />
-    <p class="font-bold" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })">{{ title }}</p>
+    <img 
+      :src="img" 
+      class="w-40" 
+      alt="Sneaker" 
+      @click="snickerDrawerOpen({ id, title, img, price, subtitle })" 
+    />
+    <p class="font-bold" @click="snickerDrawerOpen({ id, title, img, price, subtitle })">
+      {{ title }}
+    </p>
     <div class="flex justify-between mt-5">
-      <div class="flex flex-col gap-2" @click="() => snickerDrawerOpen({ id, title, img, price, subtitle })">
+      <div class="flex flex-col gap-2" @click="snickerDrawerOpen({ id, title, img, price, subtitle })">
         <span class="text-slate-200">Цена:</span>
-        <span class="font-bold">{{ price }} ₽.</span>
+        <span class="font-bold">{{ price }} ₽</span>
       </div>
       <button v-if="showAddButton">
-        <img @click="emit('onClickToAdd', item)" :src="isAdded ? '/plus-2.svg' : '/plus-1.svg'" alt="Plus" />
+        <img
+          @click="onClickToAdd({ id, title, img, price, subtitle, isAdded })"
+          :src="isAdded ? '/plus-2.svg' : '/plus-1.svg'"
+          alt="Plus"
+        />
       </button>
     </div>
   </div>
 </template>
+
 

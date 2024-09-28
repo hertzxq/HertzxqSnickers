@@ -35,6 +35,21 @@ export const useItemsStore = defineStore('items', () => {
       isLoading.value = false;  
     }
   };
+
+  const toggleFavorite = (itemId) => {
+    const item = items.value.find((i) => i.id === itemId);
+    if (item) {
+      item.isFavorite = !item.isFavorite; // Инвертируем значение isFavorite
+    }
+  };
+
+  // Функция для изменения состояния добавления в корзину у товара
+  const toggleAdded = (itemId) => {
+    const item = items.value.find((i) => i.id === itemId);
+    if (item) {
+      item.isAdded = !item.isAdded; // Инвертируем значение isAdded
+    }
+  };
   
-  return { items, isLoading, fetchItems } 
+  return { items, isLoading, fetchItems, toggleFavorite, toggleAdded } 
 })
