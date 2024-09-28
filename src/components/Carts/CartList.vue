@@ -1,6 +1,6 @@
 <script setup>
 import Cart from './Cart.vue'
-
+import SkeletonCart from './SkeletonCart.vue';
 
 defineProps({
   items: {
