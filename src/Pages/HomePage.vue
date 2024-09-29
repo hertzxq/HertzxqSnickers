@@ -40,63 +40,63 @@ const changeSearch = (event) => {
   filters.search = event.target.value
 }
 
-const fetchFavoriteItems = async () => {
-  try {
-    const { data: favorites } = await axios.get(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`)
-    console.log('items.items.value перед map:', items.items.value)
-    items.items.value = items.items.value.map((item) => {
-      const favorite = favorites.find((favorite) => favorite.item_id === item.id)
-
-      if (!favorite) {
-        return item
-      }
-
-      return {
-        ...item,
-        isFavorite: true,
-        favoriteId: favorite.id
-      }
-    })
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 const addToFavorite = async (item) => {
   try {
+    console.log("Начало операции addToFavorite. Текущее состояние isFavorite:", item.isFavorite);
+
     if (!item.isFavorite) {
-      const obj = {
-        item_id: item.id
-      }
+      console.log("Товар еще не в избранном. Добавляем...");
+      const obj = { item_id: item.id };
 
-      item.isFavorite = true
+      // Отправляем запрос на добавление в избранное
+      const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj);
+      console.log('Ответ сервера после добавления:', data);
 
-      const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj)
+      item.favoriteId = data.id;
+      item.isFavorite = true;
 
-      item.favoriteId = data.id
+      // Принудительное обновление объекта
+      item = { ...item };
+
+      console.log("Присвоенный favoriteId после добавления:", data.id);
     } else {
-      if (item.favoriteId) {
-        await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`)
+      console.log("Товар уже в избранном. Удаляем...");
 
-        item.isFavorite = false
-        item.favoriteId = null
+      if (item.favoriteId) {
+        console.log("Удаляем запись избранного с id:", item.favoriteId);
+
+        // Отправляем запрос на удаление по favoriteId
+        const response = await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`);
+        console.log("Ответ сервера после удаления:", response);
+
+        item.favoriteId = null;
+        item.isFavorite = false;
+
+        // Принудительное обновление объекта
+        item = { ...item };
+      } else {
+        console.log("favoriteId отсутствует. Невозможно удалить.");
       }
     }
   } catch (err) {
-    console.log('Error:', err)
+    console.log('Ошибка при добавлении/удалении из избранного:', err);
   }
-}
+};
+
+
+
 
 const addToCart = async (item) => {
   cartItems.value.push(item)
-  item.isAdded = true
+  items.toggleAdded(item.id)
 }
 
 const deleteFromCart = async (item) => {
   const index = cartItems.value.findIndex(cartItem => cartItem.id === item.id)
   if (index !== -1) {
     cartItems.value.splice(index, 1)
-    item.isAdded = false
+    items.toggleAdded(item.id)
   }
 }
 
@@ -115,16 +115,12 @@ const totalAmount = computed(() => {
 
 onMounted(async () => {
   await items.fetchItems(filters);
-  await fetchFavoriteItems();
 })
 
 watch(filters, async () => {
   await items.fetchItems(filters)
-  await fetchFavoriteItems()
 })
 
-
-provide('addToFavorite', addToFavorite)
 provide('onClickDrawerOpen', onClickDrawerOpen)
 provide('cartItems', cartItems)
 provide('items', items)
@@ -171,8 +167,8 @@ provide('items', items)
   </div>
   <CartList
     :items="items.items"
-    @add-to-favorite="addToFavorite"
-    @on-click-to-add="onClickToAdd"
+    :addToFavorite="addToFavorite" 
+    :onClickToAdd="onClickToAdd"
     :show-add-button="true"
     :snickerDrawerOpen="snickerDrawerOpen"
   />

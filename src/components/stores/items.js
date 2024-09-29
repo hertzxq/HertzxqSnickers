@@ -35,6 +35,16 @@ export const useItemsStore = defineStore('items', () => {
       isLoading.value = false;  
     }
   };
+
+
+  const toggleAdded = (itemId) => {
+    const item = items.value.find((i) => i.id === itemId);
+    if (item) {
+      item.isAdded = !item.isAdded; 
+    }
+  };
   
-  return { items, isLoading, fetchItems } 
+  
+  
+  return { items, isLoading, fetchItems, toggleAdded } 
 })
