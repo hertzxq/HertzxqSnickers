@@ -34,26 +34,18 @@ const onClickDrawerOpen = inject('onClickDrawerOpen')
   <div
     class="bg-white w-96 h-full fixed top-0 right-0 z-20 p-8 flex flex-col justify-between"
   >
-    <!-- Заголовок корзины -->
     <CartHeader v-if="props.cartItems.length" />
-
-    <!-- Пустая корзина -->
     <EmptyDrawer v-if="!props.cartItems.length" />
-
-    <!-- Контейнер для прокрутки товаров -->
     <div class="flex-grow overflow-y-auto">
-      <!-- Товары в корзине -->
       <CartDrawer
         v-for="item in props.cartItems"
         :key="item.id"
         :title="item.title"
-        :img="item.imageUrl"
+        :img="item.img"
         :price="item.price"
         :deleteFromCart="() => emit('deleteFromCart', item)"
       />
     </div>
-
-    <!-- Итоговая часть корзины -->
     <DrawerCart
       v-if="props.cartItems.length"
       :drawerPrice="drawerPrice"

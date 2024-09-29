@@ -22,7 +22,7 @@ defineProps({
     <div class="absolute top-8 left-8">
       <img
         @click="addToFavorite({ id, title, img, price, subtitle, isFavorite })"
-        :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
+        :src="isFavorite ? '/like-2.svg' : '/like-1.svg'" 
         alt="Favorite"
       />
     </div>

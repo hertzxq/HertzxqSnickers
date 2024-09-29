@@ -43,59 +43,61 @@ const changeSearch = (event) => {
 
 const addToFavorite = async (item) => {
   try {
-    console.log("Начало операции addToFavorite. Текущее состояние isFavorite:", item.isFavorite);
+    if (!items.items.value || !Array.isArray(items.items.value) || items.isLoading.value) {
+      console.error("Массив items еще не загружен.");
+      return;
+    }
 
     if (!item.isFavorite) {
-      console.log("Товар еще не в избранном. Добавляем...");
       const obj = { item_id: item.id };
-
-      // Отправляем запрос на добавление в избранное
-      const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj);
-      console.log('Ответ сервера после добавления:', data);
-
-      item.favoriteId = data.id;
       item.isFavorite = true;
-
-      // Принудительное обновление объекта
-      item = { ...item };
-
-      console.log("Присвоенный favoriteId после добавления:", data.id);
+      const { data } = await axios.post(`https://3a4fbd5d3da59fc8.mokky.dev/favorites`, obj);
+      item.favoriteId = data.id;
+      console.log(`Товар ${item.title} добавлен в избранное.`);
     } else {
-      console.log("Товар уже в избранном. Удаляем...");
-
-      if (item.favoriteId) {
-        console.log("Удаляем запись избранного с id:", item.favoriteId);
-
-        // Отправляем запрос на удаление по favoriteId
-        const response = await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`);
-        console.log("Ответ сервера после удаления:", response);
-
-        item.favoriteId = null;
-        item.isFavorite = false;
-
-        // Принудительное обновление объекта
-        item = { ...item };
-      } else {
-        console.log("favoriteId отсутствует. Невозможно удалить.");
-      }
+      item.isFavorite = false;
+      await axios.delete(`https://3a4fbd5d3da59fc8.mokky.dev/favorites/${item.favoriteId}`);
+      item.favoriteId = null;
+      console.log(`Товар ${item.title} удален из избранного.`);
     }
+
+    const index = items.value.findIndex(i => i.id === item.id);
+    if (index !== -1) {
+      items.value[index] = { ...item };  // Обновляем элемент в массиве
+    }
+    
   } catch (err) {
-    console.log('Ошибка при добавлении/удалении из избранного:', err);
+    console.error('Ошибка при добавлении/удалении из избранного:', err);
   }
-};
+}
+
 
 
 
 
 const addToCart = async (item) => {
-  cartItems.value.push(item)
+  const existingItem = cartItems.value.find(cartItem => cartItem.id === item.id)
+  if (existingItem) {
+    existingItem.quantity = (existingItem.quantity || 1) + 1
+
+    
+  } else {
+    item.quantity = 1 
+    cartItems.value.push(item)
+    console.log(`Товар ${item.img} добавлен в корзину.`);
+  }
   items.toggleAdded(item.id)
 }
 
 const deleteFromCart = async (item) => {
-  const index = cartItems.value.findIndex(cartItem => cartItem.id === item.id)
-  if (index !== -1) {
-    cartItems.value.splice(index, 1)
+  const existingItem = cartItems.value.find(cartItem => cartItem.id === item.id)
+  if (existingItem && existingItem.quantity > 1) {
+    existingItem.quantity -= 1 
+  } else {
+    const index = cartItems.value.findIndex(cartItem => cartItem.id === item.id)
+    if (index !== -1) {
+      cartItems.value.splice(index, 1) 
+    }
     items.toggleAdded(item.id)
   }
 }
@@ -122,7 +124,6 @@ watch(filters, async () => {
 })
 
 provide('onClickDrawerOpen', onClickDrawerOpen)
-provide('cartItems', cartItems)
 provide('items', items)
 </script>
 

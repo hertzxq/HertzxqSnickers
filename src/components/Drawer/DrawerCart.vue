@@ -29,12 +29,8 @@ Math.round(taxAmount.value)
 <template>
   <div class="mt-8">
     <div class="flex justify-between py-2">
-      <span>Итого:</span>
-      <span>{{ props.drawerPrice }} ₽.</span>
-    </div>
-    <div class="flex justify-between py-2">
-      <span>Налог 5%:</span>
-      <span>{{ Math.round(taxAmount) }} ₽.</span>
+      <span class="font-bold">Итого:</span>
+      <span class="font-bold">{{ props.drawerPrice }} ₽.</span>
     </div>
     <button
     @click="onClickBuy"
