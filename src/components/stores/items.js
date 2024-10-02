@@ -28,6 +28,9 @@ export const useItemsStore = defineStore('items', () => {
   
       isLoading.value = true; 
       const { data } = await axios.get('https://3a4fbd5d3da59fc8.mokky.dev/sneackers', { params });
+      data.forEach((item) => (item.isFavorite = false));
+      console.log(data);
+      
       items.value = data;
     } catch (error) {
       console.log(error);
@@ -36,15 +39,12 @@ export const useItemsStore = defineStore('items', () => {
     }
   };
 
-
   const toggleAdded = (itemId) => {
     const item = items.value.find((i) => i.id === itemId);
     if (item) {
       item.isAdded = !item.isAdded; 
     }
   };
-  
-  
   
   return { items, isLoading, fetchItems, toggleAdded } 
 })

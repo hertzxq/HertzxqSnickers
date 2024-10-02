@@ -14,7 +14,6 @@ defineProps({
   },
   showAddButton: Boolean,
   snickerDrawerOpen: Boolean,
-  addToFavorite: Function,
   onClickToAdd: Function
 });
 
@@ -37,9 +36,7 @@ defineProps({
       :price="item.price"
       :subtitle="item.subtitle"
       :id="item.id"
-      :isFavorite="item.isFavorite"
       :isAdded="item.isAdded"
-      :addToFavorite="addToFavorite" 
       :onClickToAdd="onClickToAdd"  
       :snickerDrawerOpen="snickerDrawerOpen"
       :showAddButton="showAddButton"

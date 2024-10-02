@@ -2,21 +2,23 @@
 <script setup>
 import Header from '@/components/Header.vue';
 import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
+
 </script>
 
 <template>
     <Header />
     <div class="container mx-auto mt-10 flex">
-      <!-- Main Content (Cart, Personal Info, etc.) -->
       <div class="main-content w-8/12">
         <div class="roundCart border w-10/12 mt-24 ml-16">
           <div class="flex justify-between m-8 border-slate-20">
             <h1 class="font-bold text-2xl pl-10 text-center mt-6">1. Корзина</h1>
-            <button class="flex w-8/12 pl-56 opacity-50 text-xl mt-6">
+            <button class="flex w-8/12 pl-80 opacity-50 text-xl mt-6">
               <img src="/bin.svg" class="mt-1.5 mr-2" alt="bin" />Очистить корзину
             </button>
           </div>
-          <PurchaseCart />
+          <PurchaseCart
+          v-for="item in cartItems"
+          :key="item.id"/>
           <PurchaseCart />
         </div>
   
@@ -115,8 +117,6 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
           </div>
         </div>
       </div>
-  
-      <!-- Summary Box (positioned to the right) -->
       <div class="summary-box w-full h-1/2 mr-16 mt-72 bg-white rounded-lg shadow-lg p-8 max-w-md ml-auto">
         <div class="flex justify-between mb-6">
           <h2 class="text-xl font-semibold">Итого:</h2>
@@ -125,27 +125,26 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
   
         <div class="mb-6 border-b pb-6">
           <div class="flex items-center mb-2">
-            <img src="/like-1.svg" class="h-5 w-5 mr-2" alt="box icon" />
             <span class="text-lg">Стоимость товаров:</span>
-            <span class="ml-auto text-lg font-semibold">2005 ₽</span>
+            <span class="ml-auto text-lg font-semibold">0 ₽</span>
           </div>
   
           <div class="flex justify-between mb-2">
             <span class="text-lg">Налоги:</span>
-            <span class="text-lg font-semibold">240 ₽</span>
+            <span class="text-lg font-semibold">0 ₽</span>
           </div>
   
           <div class="flex justify-between">
             <span class="text-lg">Доставка:</span>
-            <span class="text-lg font-semibold">120 ₽</span>
+            <span class="text-lg font-semibold">0 ₽</span>
           </div>
         </div>
   
         <div class="promo-section mb-6">
-          <p class="text-sm text-gray-600">У меня есть промокод</p>
+          <button><p class="text-sm text-gray-600 hover:text-slate-900">У меня есть промокод</p></button>
         </div>
   
-        <button class="w-full py-3 text-white font-semibold rounded-lg bg-orange-500 hover:bg-orange-600">
+        <button @click="test" class="w-full py-3 text-white font-semibold rounded-lg bg-orange-500 hover:bg-orange-600">
           Перейти к оплате
         </button>
       </div>
@@ -168,10 +167,10 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
 }
 
 .summary-box {
-  border-radius: 16px; /* Similar to rounded edges in the screenshot */
+  border-radius: 16px; 
 }
 
 button {
-  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  transition: background-color 0.3s ease;
 }
 </style>

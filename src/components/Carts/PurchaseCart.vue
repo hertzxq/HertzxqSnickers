@@ -1,4 +1,24 @@
 <script setup>
+import { ref } from 'vue';
+
+defineProps({
+  CartItems: Object
+})
+
+const counterPurchase = ref(0)
+
+const MinusIncrement = () => {
+  if (counterPurchase.value >= 1) {
+    counterPurchase.value--
+  }
+}
+
+const PlusIncrement = () => {
+  if (counterPurchase.value >= 0) {
+    counterPurchase.value++
+  }
+}
+
 </script>
 
 <template>
@@ -19,11 +39,11 @@
         </div>
       </div>
       <div class="flex items-center space-x-2 ">
-          <button class="border border-bg-slate-900 text-obg-slate-900rounded-lg w-8 h-8 flex justify-center items-center hover:bg-slate-100">
+          <button @click="MinusIncrement" class="border border-bg-slate-900 text-obg-slate-900rounded-lg w-8 h-8 flex justify-center items-center hover:bg-slate-100">
             -
           </button>
-          <span class="text-lg font-medium">2</span>
-          <button class="border border-bg-slate-900 text-bg-slate-900 rounded-lg w-8 h-8 flex justify-center items-center hover:bg-slate-100">
+          <span class="text-lg font-medium">{{ counterPurchase }}</span>
+          <button @click="PlusIncrement" class="border border-bg-slate-900 text-bg-slate-900 rounded-lg w-8 h-8 flex justify-center items-center hover:bg-slate-100">
             +
           </button>
           <button class="text-gray-400 hover:text-gray-600 ml-2">

@@ -1,18 +1,28 @@
 <!-- eslint-disable vue/multi-word-component-names -->
+<!-- eslint-disable no-undef -->
 <script setup>
-defineProps({
-  id: Number,
+import { useFavoritesStore } from '../stores/favorites'; 
+import { computed } from 'vue';
+
+const favoritesStore = useFavoritesStore();
+
+const props = defineProps({
+  id: {
+    type: Number,
+    required: true,
+  },
   title: String,
   img: String,
   price: Number,
   subtitle: String,
-  isFavorite: Boolean,
   isAdded: Boolean,
-  addToFavorite: Function, 
   onClickToAdd: Function, 
   snickerDrawerOpen: Function, 
-  showAddButton: Boolean 
+  showAddButton: Boolean
 });
+
+const favoriteStatus = computed(() => favoritesStore.isFavorite(props.id));
+
 </script>
 
 <template>
@@ -21,8 +31,8 @@ defineProps({
   >
     <div class="absolute top-8 left-8">
       <img
-        @click="addToFavorite({ id, title, img, price, subtitle, isFavorite })"
-        :src="isFavorite ? '/like-2.svg' : '/like-1.svg'" 
+        @click="favoritesStore.addToFavorite({ id, title, img, price, subtitle })"
+        :src="favoriteStatus ? '/like-2.svg' : '/like-1.svg'"
         alt="Favorite"
       />
     </div>
@@ -50,5 +60,4 @@ defineProps({
     </div>
   </div>
 </template>
-
 
