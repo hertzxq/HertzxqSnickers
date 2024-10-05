@@ -2,6 +2,74 @@
 <script setup>
 import Header from '@/components/Header.vue';
 import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
+import { useCartStore } from '@/components/stores/cart';
+import { computed } from 'vue';
+import Swal from 'sweetalert2'
+
+const CartItemsStore = useCartStore()
+const purchaseItems = CartItemsStore.cartItems
+
+const deleteFromCart = (item) => {
+  console.log("purchaseItems", purchaseItems.id);
+  
+  if (!purchaseItems) {
+    console.error("purchaseItems is undefined");
+    return;
+  }
+
+  const existingItem = purchaseItems.find(cartItem => cartItem.id === item.id);
+  if (existingItem && existingItem.quantity > 1) {
+    existingItem.quantity -= 1;
+  } else {
+    const index = purchaseItems.findIndex(cartItem => cartItem.id === item.id);
+    if (index !== -1) {
+      purchaseItems.splice(index, 1);
+    }
+  }
+  console.log(`Товар ${item.title} удален из корзины.`);
+  console.log(`Товар ${purchaseItems.title} удален из корзины.`);
+};
+
+const deleteAllCarts = () => {
+  purchaseItems.splice(0, purchaseItems.length);
+  console.log('Корзина очищена');
+};
+
+const totalPrice = computed(() => {
+  return purchaseItems.reduce((total, item) => total + 500 + item.price * item.quantity, 0);
+});
+
+const itemPrice = computed(() => {
+  return purchaseItems.reduce((total, item) => total + item.price * item.quantity, 0);
+});
+
+  const updateQuantity = (item, newQuantity) => {
+    console.log("Item passed to updateQuantity:", item);
+    console.log("New quantity:", newQuantity);
+    console.log("purchaseItems:", purchaseItems);
+  const existingItem = purchaseItems.find(i => i.id === item.id);
+  if (existingItem) {
+    existingItem.quantity = newQuantity;
+  }
+};
+
+const successOrder = () => {
+    Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "Заказ успешно оформлен!",
+    showConfirmButton: false,
+    timer: 1500
+  });
+}
+
+const errorOrder = () => {
+    Swal.fire({
+    icon: "error",
+    title: "Оййй...",
+    text: "Вы ничего не заказали =(",
+  });
+}
 
 </script>
 
@@ -12,14 +80,24 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
         <div class="roundCart border w-10/12 mt-24 ml-16">
           <div class="flex justify-between m-8 border-slate-20">
             <h1 class="font-bold text-2xl pl-10 text-center mt-6">1. Корзина</h1>
-            <button class="flex w-8/12 pl-80 opacity-50 text-xl mt-6">
+            <button @click="deleteAllCarts" class="flex w-8/12 pl-80 opacity-50 text-xl mt-6">
               <img src="/bin.svg" class="mt-1.5 mr-2" alt="bin" />Очистить корзину
             </button>
           </div>
-          <PurchaseCart
-          v-for="item in cartItems"
-          :key="item.id"/>
-          <PurchaseCart />
+          <div v-if="purchaseItems.length > 0" v-auto-animate>
+            <PurchaseCart
+            v-for="item in purchaseItems"
+            :key="item.id"
+            :title="item.title"
+            :img="item.img"
+            :price="item.price"
+            @updateQuantity="updateQuantity(item, $event)"
+            :deleteFromCart="() => deleteFromCart(item)"
+          />
+          </div>
+          <div v-else class="flex justify-center">
+            <h1 class="mt-12 mb-12 text-2xl font-bold">Вы пока ничего не заказали!</h1>
+          </div>
         </div>
   
         <div class="roundCart border text-center w-10/12 mt-24 ml-16">
@@ -96,47 +174,37 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
               placeholder="Type your comment here..."
             ></textarea>
           </div>
-          <h1 class="mb-2 ml-8">Время доставки</h1>
-          <div class="relative inline-block text-left mb-8 ml-8">
-            <button
-              type="button"
-              class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              id="menu-button"
-              aria-expanded="true"
-              aria-haspopup="true"
-            >
-              Доставка в 11:00
-              <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path
-                  fill-rule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
+          <h2 class="ml-14">Время доставки:</h2>
+        <div class="flex items-center ml-8 mb-8">
+          <img src="/clock.svg" alt="clock" class="w-5 h-5">
+          <select
+            v-auto-animate
+            @change="changeSortBy"
+            class="cursor-pointer pl-2 py-2 outline-none w-full lg:w-auto"
+          >
+            <option value="11:00">Доставка в 11:00</option>
+            <option value="12:00">Доставка в 12:00</option>
+            <option value="13:00">Доставка в 13:00</option>
+            <option value="14:00">Доставка в 14:00</option>
+          </select>
+        </div>
         </div>
       </div>
       <div class="summary-box w-full h-1/2 mr-16 mt-72 bg-white rounded-lg shadow-lg p-8 max-w-md ml-auto">
         <div class="flex justify-between mb-6">
           <h2 class="text-xl font-semibold">Итого:</h2>
-          <h2 class="text-3xl font-bold text-black">2365 ₽</h2>
+          <h2 class="text-3xl font-bold text-black">{{ totalPrice }} ₽</h2>
         </div>
   
         <div class="mb-6 border-b pb-6">
           <div class="flex items-center mb-2">
             <span class="text-lg">Стоимость товаров:</span>
-            <span class="ml-auto text-lg font-semibold">0 ₽</span>
-          </div>
-  
-          <div class="flex justify-between mb-2">
-            <span class="text-lg">Налоги:</span>
-            <span class="text-lg font-semibold">0 ₽</span>
+            <span class="ml-auto text-lg font-semibold">{{ itemPrice }} ₽</span>
           </div>
   
           <div class="flex justify-between">
             <span class="text-lg">Доставка:</span>
-            <span class="text-lg font-semibold">0 ₽</span>
+            <span class="text-lg font-semibold">500 ₽</span>
           </div>
         </div>
   
@@ -144,7 +212,10 @@ import PurchaseCart from '@/components/Carts/PurchaseCart.vue';
           <button><p class="text-sm text-gray-600 hover:text-slate-900">У меня есть промокод</p></button>
         </div>
   
-        <button @click="test" class="w-full py-3 text-white font-semibold rounded-lg bg-orange-500 hover:bg-orange-600">
+        <button v-if="purchaseItems.length > 0" @click="successOrder" class="w-full py-3 text-white font-semibold rounded-lg bg-orange-500 hover:bg-orange-600">
+          Перейти к оплате
+        </button>
+        <button v-else @click="errorOrder" class="w-full py-3 text-white font-semibold rounded-lg bg-orange-500 hover:bg-orange-600">
           Перейти к оплате
         </button>
       </div>
