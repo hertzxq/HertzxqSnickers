@@ -80,9 +80,11 @@ const errorOrder = () => {
       <div class="roundCart border w-full lg:w-10/12 mt-12 lg:mt-24 lg:ml-16 p-4 lg:p-8">
         <div class="flex flex-col lg:flex-row justify-between m-8 border-slate-20">
           <h1 class="font-bold text-2xl pl-4 lg:pl-10 text-center lg:text-left mt-6">1. Корзина</h1>
-          <button @click="deleteAllCarts" class="flex w-full lg:w-8/12 lg:pl-80 opacity-50 text-xl mt-6">
-            <img src="/bin.svg" class="mt-1.5 mr-2" alt="bin" />Очистить корзину
-          </button>
+          <button @click="deleteAllCarts" class="flex items-center justify-center w-full lg:w-8/12 lg:pl-80 text-gray-500 hover:text-gray-700 text-xl mt-6 transition-opacity">
+            <img src="/bin.svg" class="w-6 h-6 mr-2" alt="bin" /> <!-- Уменьшили размер иконки -->
+            Очистить корзину
+        </button>
+
         </div>
         <div v-if="purchaseItems.length > 0" v-auto-animate>
           <PurchaseCart

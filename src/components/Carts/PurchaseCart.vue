@@ -15,12 +15,12 @@ const counterPurchase = ref(1);
 const MinusIncrement = () => {
   if (counterPurchase.value > 1) {
     counterPurchase.value--;
-    emit('updateQuantity', counterPurchase.value);  // Отправляем новое количество в родительский компонент
+    emit('updateQuantity', counterPurchase.value);  
   }
 };
 const PlusIncrement = () => {
   counterPurchase.value++;
-  emit('updateQuantity', counterPurchase.value);  // Отправляем новое количество в родительский компонент
+  emit('updateQuantity', counterPurchase.value);  
 };
 
 </script>
