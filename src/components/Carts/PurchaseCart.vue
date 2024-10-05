@@ -29,7 +29,7 @@ const PlusIncrement = () => {
   <div class="w-full  flex flex-col lg:flex-row justify-between items-center border border-slate-100 rounded-xl p-4 lg:p-8 cursor-pointer transition">
     <img 
       :src="img" 
-      class="w-full lg:w-12 h-42 lg:h-24 object-cover mb-4 lg:mb-0" 
+      class="w-full lg:w-28 h-42 lg:h-24 object-cover mb-4 lg:mb-0 mr-4" 
       alt="Product Image" 
     />
 
@@ -39,7 +39,7 @@ const PlusIncrement = () => {
 
     <div class="flex items-center justify-between mb-4 lg:mb-0">
       <div class="flex flex-col gap-2 text-center lg:text-left">
-        <span class="font-bold text-xl">{{ price }} ₽</span>
+        <span class="font-bold text-xl mr-8">{{ price }} ₽</span>
       </div>
     </div>
 
