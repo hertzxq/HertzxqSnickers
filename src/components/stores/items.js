@@ -4,34 +4,35 @@ import { ref } from 'vue'
 
 export const useItemsStore = defineStore('items', () => {
   const items = ref([])
-  const isLoading = ref(false) 
+  const isLoading = ref(false)
 
   const flattenItems = (nestedData) => {
-    const flattenedItems = []
+    const flattenedItems = new Set()
 
     nestedData.forEach((group) => {
-      // Перебираем вложенные объекты (ключи "1", "2", ...)
       Object.keys(group).forEach((key) => {
-        if (!isNaN(key)) {  // Проверяем, что ключ — число
-          flattenedItems.push(group[key])
+        if (!isNaN(key)) {
+          // Добавляем элементы в Set для исключения дубликатов
+          flattenedItems.add(group[key])
         }
       })
     })
 
-    return flattenedItems
+    // Преобразуем Set обратно в массив перед возвращением
+    return Array.from(flattenedItems)
   }
 
   const fetchItems = async (filters) => {
     try {
       const params = {}
-  
+
       if (filters.search) {
         params.title = `*${filters.search}*`
       }
-  
+
       if (filters.sortBy) {
         const sortBy = filters.sortBy
-  
+
         if (sortBy === 'name') {
           params.sortBy = 'name'
         } else if (sortBy === 'price') {
@@ -40,21 +41,22 @@ export const useItemsStore = defineStore('items', () => {
           params.sortBy = '-price'
         }
       }
-  
-      isLoading.value = true 
+
+      isLoading.value = true
       const { data } = await axios.get('https://3a4fbd5d3da59fc8.mokky.dev/sneackers', { params })
 
-      // Преобразуем данные с вложенными ключами в плоский массив
+      // Вызов обновленной функции flattenItems для исключения дубликатов
       const flattenedData = flattenItems(data)
 
+      // Добавляем isFavorite каждому элементу
       flattenedData.forEach((item) => (item.isFavorite = false))
       console.log(flattenedData)
-      
+
       items.value = flattenedData
     } catch (error) {
       console.log(error)
     } finally {
-      isLoading.value = false  
+      isLoading.value = false
     }
   }
 
@@ -65,5 +67,5 @@ export const useItemsStore = defineStore('items', () => {
     }
   }
 
-  return { items, isLoading, fetchItems, toggleAdded } 
+  return { items, isLoading, fetchItems, toggleAdded }
 })
