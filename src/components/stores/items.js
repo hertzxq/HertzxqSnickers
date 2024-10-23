@@ -6,21 +6,6 @@ export const useItemsStore = defineStore('items', () => {
   const items = ref([])
   const isLoading = ref(false) 
 
-  const flattenItems = (nestedData) => {
-    const flattenedItems = []
-
-    nestedData.forEach((group) => {
-      // Перебираем вложенные объекты (ключи "1", "2", ...)
-      Object.keys(group).forEach((key) => {
-        if (!isNaN(key)) {  // Проверяем, что ключ — число
-          flattenedItems.push(group[key])
-        }
-      })
-    })
-
-    return flattenedItems
-  }
-
   const fetchItems = async (filters) => {
     try {
       const params = {}
@@ -44,8 +29,8 @@ export const useItemsStore = defineStore('items', () => {
       isLoading.value = true 
       const { data } = await axios.get('https://3a4fbd5d3da59fc8.mokky.dev/sneackers', { params })
 
-      // Преобразуем данные с вложенными ключами в плоский массив
-      const flattenedData = flattenItems(data)
+      // Плоский JSON уже не требует преобразования
+      const flattenedData = data.items || data; // Прямое присваивание данных
 
       flattenedData.forEach((item) => (item.isFavorite = false))
       console.log(flattenedData)

@@ -48,7 +48,7 @@ const favoriteStatus = computed(() => favoritesStore.isFavorite(props.id));
     <div class="flex justify-between mt-5">
       <div class="flex flex-col gap-2" @click="snickerDrawerOpen({ id, title, img, price, subtitle })">
         <span class="text-slate-200">Цена:</span>
-        <span class="font-bold">{{ price }}</span>
+        <span class="font-bold">{{ price }} ₽</span>
       </div>
       <button v-if="showAddButton">
         <img
