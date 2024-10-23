@@ -9,6 +9,7 @@ import './assets/main.css'
 import HomePage from './Pages/HomePage.vue'
 import FavoritePage from './Pages/FavoritePage.vue'
 import Purchase from './Pages/Purchase.vue'
+import Page404 from './Pages/Page404.vue';
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -18,6 +19,7 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/favorites', component: FavoritePage },
   { path: '/purchase', component: Purchase },
+  { path: '/:pathMatch(.*)*', component: Page404 },
 ]
 
 const router = createRouter({
