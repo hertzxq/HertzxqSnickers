@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, provide, watch } from 'vue';
+import { onMounted, reactive, provide, watch, computed } from 'vue';
 import { ref } from 'vue';
 import { useItemsStore } from '@/components/stores/items';
 import { useCartStore } from '@/components/stores/cart';
@@ -13,13 +13,44 @@ const selectedItem = ref(null);
 const items = useItemsStore();
 const cart = useCartStore(); 
 
+const itemsPerPage = ref(12);
+const pageNumber = ref(0);
+
+
+const writeLog = () => {
+  let txtFile = new File(afilename);
+  txtFile.writeln(output);
+  txtFile.close();
+}
+
+
+const nextPage = () => {
+  if (pageNumber.value < pageCount.value - 1) {
+    pageNumber.value++;
+  }
+};
+
+const previousPage = () => {
+  if (pageNumber.value > 0) {
+    pageNumber.value--;
+  }
+};
+
+const pageCount = computed(() => {
+  let totalItems = items.items.length;
+  return Math.ceil(totalItems / itemsPerPage.value);
+});
+
+const paginateData = computed(() => {
+  const start = pageNumber.value * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return items.items.slice(start, end);
+});
+
 const filters = reactive({
   sortBy: '',
   search: ''
 });
-
-const drawer = ref(false);
-const snickerDrawer = ref(false);
 
 const onClickDrawerOpen = () => {
   drawer.value = !drawer.value;
@@ -44,7 +75,6 @@ const addToCart = (item) => {
   items.toggleAdded(item.id);
 };
 
-// Удаление из корзины
 const deleteFromCart = (item) => {
   cart.deleteFromCart(item); 
   items.toggleAdded(item.id);
@@ -111,10 +141,40 @@ provide('cartItems', cart.cartItems);
       </div>
     </div>
   </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
   <CartList
-    :items="items.items" 
+    v-for="item in paginateData"
+    :key="item.id"
+    :items="[item]" 
     :onClickToAdd="onClickToAdd"
     :show-add-button="true"
     :snickerDrawerOpen="snickerDrawerOpen"
   />
+</div>
+
+
+  <div class="text-center mt-6 space-y-4">
+  <div class="space-x-4">
+    <button 
+      :disabled="pageNumber === 0" 
+      @click="previousPage"
+      class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
+    >
+      Previous
+    </button>
+    <button 
+      :disabled="pageNumber >= pageCount - 1" 
+      @click="nextPage"
+      class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
+    >
+      Next
+    </button>
+  </div>
+  
+  <div class="text-lg">
+    <span class="font-bold">Page: {{ pageNumber + 1 }} / {{ pageCount }}</span>
+  </div>
+</div>
+
 </template>
