@@ -7,7 +7,7 @@ import { useCartStore } from '@/components/stores/cart';
 import Header from '@/components/Header.vue';
 import CartList from '@/components/Carts/CartList.vue';
 import Drawer from '@/components/Drawer/Drawer.vue';
-import SnickersDrawer from '@/components/Snickers/SnickersDrawer.vue';
+import Footer from '@/components/Footer.vue';
 
 const selectedItem = ref(null);
 const items = useItemsStore();
@@ -16,13 +16,8 @@ const cart = useCartStore();
 const itemsPerPage = ref(12);
 const pageNumber = ref(0);
 
-
-const writeLog = () => {
-  let txtFile = new File(afilename);
-  txtFile.writeln(output);
-  txtFile.close();
-}
-
+const drawer = ref(false);
+const snickerDrawer = ref(false);
 
 const nextPage = () => {
   if (pageNumber.value < pageCount.value - 1) {
@@ -176,5 +171,7 @@ provide('cartItems', cart.cartItems);
     <span class="font-bold">Page: {{ pageNumber + 1 }} / {{ pageCount }}</span>
   </div>
 </div>
+
+<Footer />
 
 </template>
